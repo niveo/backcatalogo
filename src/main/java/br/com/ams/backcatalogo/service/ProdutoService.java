@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.ams.backcatalogo.exception.ProdutoNotFoundException;
+import br.com.ams.backcatalogo.exception.EntityNotFoundException;
 import br.com.ams.backcatalogo.model.Produto;
 import br.com.ams.backcatalogo.repository.ProdutoRepository;
 
@@ -37,11 +37,12 @@ public class ProdutoService implements ContractService<Produto> {
 
 	@Override
 	public Produto obterCodigo(Integer codigo) throws Exception {
-		return this.produtoRepository.findById(codigo).orElseThrow(() -> new ProdutoNotFoundException(codigo));
+		return this.produtoRepository.findById(codigo)
+				.orElseThrow(() -> new EntityNotFoundException("Produto", codigo));
 	}
 
 	public Produto obterReferencia(String referencia) throws Exception {
 		return this.produtoRepository.obterReferencia(referencia)
-				.orElseThrow(() -> new ProdutoNotFoundException(referencia));
+				.orElseThrow(() -> new EntityNotFoundException("Produto", referencia));
 	}
 }

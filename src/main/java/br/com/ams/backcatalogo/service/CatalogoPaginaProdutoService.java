@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.ams.backcatalogo.exception.CatalogoPaginaProdutoNotFoundException;
+import br.com.ams.backcatalogo.exception.EntityNotFoundException;
 import br.com.ams.backcatalogo.model.CatalogoPaginaProduto;
 import br.com.ams.backcatalogo.repository.CatalogoPaginaProdutoRepository;
 
@@ -15,44 +15,44 @@ import br.com.ams.backcatalogo.repository.CatalogoPaginaProdutoRepository;
 public class CatalogoPaginaProdutoService implements ContractService<CatalogoPaginaProduto> {
 
 	@Autowired
-	private CatalogoPaginaProdutoRepository catalogoPaginaProdutoRepository;
+	private CatalogoPaginaProdutoRepository repository;
 
 	@Override
 	public List<CatalogoPaginaProduto> obterTodos() throws Exception {
-		return this.catalogoPaginaProdutoRepository.findAll();
+		return this.repository.findAll();
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public CatalogoPaginaProduto salvar(CatalogoPaginaProduto entity) throws Exception {
-		return catalogoPaginaProdutoRepository.save(entity);
+		return repository.save(entity);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public CatalogoPaginaProduto atualizar(Integer codigo, CatalogoPaginaProduto entity) throws Exception {
-		return catalogoPaginaProdutoRepository.save(entity);
+		return repository.save(entity);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void remover(Integer codigo) throws Exception {
-		this.catalogoPaginaProdutoRepository.deleteById(codigo);
+		this.repository.deleteById(codigo);
 	}
 
 	@Override
 	public CatalogoPaginaProduto obterCodigo(Integer codigo) throws Exception {
-		return this.catalogoPaginaProdutoRepository.findById(codigo)
-				.orElseThrow(() -> new CatalogoPaginaProdutoNotFoundException(codigo));
+		return this.repository.findById(codigo)
+				.orElseThrow(() -> new EntityNotFoundException("Catalogo Pagina Produto", codigo));
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
 	public List<CatalogoPaginaProduto> obterRegistrosPagina(Integer codigoPagina) throws Exception {
-		return catalogoPaginaProdutoRepository.obterRegistrosPagina(codigoPagina);
+		return repository.obterRegistrosPagina(codigoPagina);
 	}
 
 	public long obterRegistrosPaginaConta(Integer codigoPagina) {
-		return catalogoPaginaProdutoRepository.obterRegistrosPaginaConta(codigoPagina);
+		return repository.obterRegistrosPaginaConta(codigoPagina);
 	}
 
 }

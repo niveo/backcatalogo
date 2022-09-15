@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,8 +22,8 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(of = { "codigo" })
 @Entity
+@ToString(of = { "codigo" })
 public class CatalogoPaginaProduto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -59,5 +58,18 @@ public class CatalogoPaginaProduto implements Serializable {
 
 	@Column
 	private Float height;
+
+	public CatalogoPaginaProduto(CatalogoPagina catalogoPagina, Produto produto, Float inicialPosicalX,
+			Float finalPosicalX, Float inicialPosicalY, Float finalPosicalY, Float width, Float height) {
+		super();
+		this.catalogoPagina = catalogoPagina;
+		this.produto = produto;
+		this.inicialPosicalX = inicialPosicalX;
+		this.finalPosicalX = finalPosicalX;
+		this.inicialPosicalY = inicialPosicalY;
+		this.finalPosicalY = finalPosicalY;
+		this.width = width;
+		this.height = height;
+	}
 
 }

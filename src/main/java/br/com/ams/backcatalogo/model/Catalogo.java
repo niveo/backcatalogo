@@ -54,8 +54,8 @@ public class Catalogo extends AbstractTimesTampEntity implements Serializable {
 	@Column
 	private String tituloEmail;
 
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonManagedReference
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "catalogo", targetEntity = CatalogoPagina.class)
 	private List<CatalogoPagina> catalogoPaginas;
 

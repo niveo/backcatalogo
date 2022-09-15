@@ -2,8 +2,13 @@ package br.com.ams.backcatalogo.controller;
 
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.apache.commons.io.FileUtils;
 import br.com.ams.backcatalogo.service.CatalogoArquivosService;
 import br.com.ams.backcatalogo.service.FileStorageService;
 
@@ -46,6 +51,27 @@ public class CatalogArquivoController {
 		catalogoArquivosService.uploadArquivo(fileName, codigo);
 
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "catalogoarquivo/download/{codigo}", method = RequestMethod.GET)
+	public ResponseEntity<Resource> downloadCatalogo(HttpServletResponse response,
+			@PathVariable(value = "codigo") Integer codigo) throws Exception {
+		var bis = catalogoArquivosService.downloadCatalogo(codigo);
+		return ResponseEntity.ok().contentLength(bis.length())
+				.header("Content-Disposition", "attachment; filename=\"" + bis.getName() + "\"")
+				.contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.body(new ByteArrayResource(FileUtils.readFileToByteArray(bis)));
+	}
+
+	@RequestMapping(value = "catalogoarquivo/pagina/download/{codigoCatalogo}", method = RequestMethod.GET)
+	public ResponseEntity<Resource> downloadCatalogoPaginas(HttpServletResponse response,
+			@PathVariable(value = "codigoCatalogo") Integer codigoCatalogo,
+			@RequestParam(value = "codigoCatalogoPaginas") String codigoCatalogoPaginas) throws Exception {
+		var bis = catalogoArquivosService.downloadCatalogoPaginas(codigoCatalogo, codigoCatalogoPaginas);
+		return ResponseEntity.ok().contentLength(bis.length())
+				.header("Content-Disposition", "attachment; filename=\"" + bis.getName() + "\"")
+				.contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.body(new ByteArrayResource(FileUtils.readFileToByteArray(bis)));
 	}
 
 }

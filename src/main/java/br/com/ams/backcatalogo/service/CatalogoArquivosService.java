@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -20,10 +21,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import br.com.ams.backcatalogo.commons.Funcoes;
+import br.com.ams.backcatalogo.commons.Utils;
 import br.com.ams.backcatalogo.exception.CustomException;
 import br.com.ams.backcatalogo.model.Catalogo;
 import br.com.ams.backcatalogo.model.CatalogoPagina;
 import br.com.ams.backcatalogo.model.CatalogoPaginaProduto;
+import br.com.ams.backcatalogo.repository.CatalogoPaginasRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -35,6 +41,11 @@ public class CatalogoArquivosService {
 
 	@Value("${diretorio.catalogos}")
 	String sistemaDiretorioCatalogos;
+
+	private static final DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+	@Autowired
+	private CatalogoPaginasRepository catalogoPaginasRepository;
 
 	@Autowired
 	private CatalogoService catalogoService;
@@ -280,5 +291,64 @@ public class CatalogoArquivosService {
 		} else {
 			log.error(sourceFile.getName() + " File not exists");
 		}
+	}
+
+	public File downloadCatalogo(Integer codigoCatalogo) throws Exception {
+
+		var registro = catalogoPaginasRepository.obterPaginasDoCatalogo(codigoCatalogo);
+
+		var files = Utils.diretorioTemporario();
+
+		for (var caPagina : registro) {
+			var destFile = new File(files.toString() + File.separator + caPagina.getCodigo() + "_"
+					+ dtFormat.format(caPagina.getDataAlterado()));
+
+			var fs = new File(sistemaDiretorioCatalogos + File.separator + caPagina.getCatalogo().getCodigo()
+					+ File.separator + "paginas" + File.separator + caPagina.getCodigo() + ".jpeg");
+
+			if (!fs.exists()) {
+				throw new Exception("Arquivo " + fs.toString() + " não localizado.");
+			}
+
+			FileUtils.copyFile(fs, destFile);
+		}
+
+		var fileZip = File.createTempFile(UUID.randomUUID().toString(), ".zip");
+
+		Funcoes.zipDirectory(new ArrayList<>(), files, fileZip.toString());
+
+		return fileZip;
+	}
+
+	public File downloadCatalogoPaginas(Integer codigoCatalogo, String codigoCatalogoPaginas) throws Exception {
+
+		Integer[] codigos = new ObjectMapper().readValue(codigoCatalogoPaginas, Integer[].class);
+
+		var registro = catalogoPaginasRepository.obterPaginasDoCatalogo(codigoCatalogo, codigos);
+
+		var files = new File(System.getProperty("java.io.tmpdir") + File.separator + UUID.randomUUID().toString());
+		if (!files.exists()) {
+			files.mkdirs();
+		}
+
+		for (var caPagina : registro) {
+			var destFile = new File(files.toString() + File.separator + caPagina.getCodigo() + "_"
+					+ dtFormat.format(caPagina.getDataAlterado()));
+
+			var fs = new File(sistemaDiretorioCatalogos + File.separator + caPagina.getCatalogo().getCodigo()
+					+ File.separator + "paginas" + File.separator + caPagina.getCodigo() + ".jpeg");
+
+			if (!fs.exists()) {
+				throw new Exception("Arquivo " + fs.toString() + " não localizado.");
+			}
+
+			FileUtils.copyFile(fs, destFile);
+		}
+
+		var fileZip = File.createTempFile(UUID.randomUUID().toString(), ".zip");
+
+		Funcoes.zipDirectory(new ArrayList<>(), files, fileZip.toString());
+
+		return fileZip;
 	}
 }

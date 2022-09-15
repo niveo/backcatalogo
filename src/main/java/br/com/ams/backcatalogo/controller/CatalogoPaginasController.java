@@ -1,63 +1,55 @@
 package br.com.ams.backcatalogo.controller;
 
-import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ams.backcatalogo.model.CatalogoPagina;
 import br.com.ams.backcatalogo.service.CatalogoPaginasService;
 
 @RestController
-@RequestMapping("catalogopagina")
-public class CatalogoPaginasController {
+public class CatalogoPaginasController implements ContractController<CatalogoPagina> {
 
 	@Autowired
 	private CatalogoPaginasService service;
 
-	@GetMapping(value = "/todos")
-	public ResponseEntity<Resource> downloadSistemaLiberado(HttpServletResponse response) throws Exception {
-		var bis = service.downloadTodos();
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM)
-				.body(new ByteArrayResource(FileUtils.readFileToByteArray(bis)));
+	@RequestMapping(value = "/catalogopagina", method = RequestMethod.GET)
+	public ResponseEntity<List<CatalogoPagina>> obterTodos() throws Exception {
+		var registro = this.service.obterTodos();
+		return new ResponseEntity<List<CatalogoPagina>>(registro, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/catalogo")
-	public ResponseEntity<Resource> downloadCatalogo(HttpServletResponse response,
-			@RequestParam(value = "codigoCatalogo") Integer codigoCatalogo) throws Exception {
-		var bis = service.downloadCatalogo(codigoCatalogo);
-		return ResponseEntity.ok().contentLength(bis.length())
-				.header("Content-Disposition", "attachment; filename=\"" + bis.getName() + "\"")
-				.contentType(MediaType.APPLICATION_OCTET_STREAM)
-				.body(new ByteArrayResource(FileUtils.readFileToByteArray(bis)));
+	@RequestMapping(value = "/catalogopagina/{codigo}", method = RequestMethod.GET)
+	public ResponseEntity<CatalogoPagina> obterCodigo(@PathVariable(value = "codigo") Integer codigo) throws Exception {
+		var registro = this.service.obterCodigo(codigo);
+		return new ResponseEntity<CatalogoPagina>(registro, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/catalogoPaginas")
-	public ResponseEntity<Resource> downloadCatalogoPaginas(HttpServletResponse response,
-			@RequestParam(value = "codigoCatalogo") Integer codigoCatalogo,
-			@RequestParam(value = "codigoCatalogoPagina") String codigoCatalogoPagina) throws Exception {
-		var bis = service.downloadCatalogoPaginas(codigoCatalogo, codigoCatalogoPagina);
-		return ResponseEntity.ok().contentLength(bis.length())
-				.header("Content-Disposition", "attachment; filename=\"" + bis.getName() + "\"")
-				.contentType(MediaType.APPLICATION_OCTET_STREAM)
-				.body(new ByteArrayResource(FileUtils.readFileToByteArray(bis)));
+	@RequestMapping(value = "/catalogopagina", method = RequestMethod.POST)
+	public ResponseEntity<CatalogoPagina> salvar(@RequestBody CatalogoPagina entity) throws Exception {
+		var registro = this.service.salvar(entity);
+		return new ResponseEntity<CatalogoPagina>(registro, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/catalogoPagina")
-	public ResponseEntity<Resource> downloadCatalogoPagina(HttpServletResponse response,
-			@RequestParam(value = "codigoCatalogo") Integer codigoCatalogo,
-			@RequestParam(value = "codigoCatalogoPagina") Integer codigoCatalogoPagina) throws Exception {
-		var bis = service.downloadCatalogoPagina(codigoCatalogo, codigoCatalogoPagina);
-		return ResponseEntity.ok().contentLength(bis.length())
-				.header("Content-Disposition", "attachment; filename=\"" + bis.getName() + "\"")
-				.contentType(MediaType.APPLICATION_OCTET_STREAM)
-				.body(new ByteArrayResource(FileUtils.readFileToByteArray(bis)));
+	@RequestMapping(value = "/catalogopagina/{codigo}", method = RequestMethod.PUT)
+	public ResponseEntity<CatalogoPagina> atualizar(@PathVariable(value = "codigo") Integer codigo,
+			@RequestBody CatalogoPagina entity) throws Exception {
+		var registro = this.service.atualizar(codigo, entity);
+		return new ResponseEntity<CatalogoPagina>(registro, HttpStatus.OK);
 	}
+
+	@RequestMapping(value = "/catalogopagina/{codigo}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> remover(@PathVariable(value = "codigo") Integer codigo) throws Exception {
+		this.service.remover(codigo);
+		return ResponseEntity.ok().build();
+	}
+
+	
 }

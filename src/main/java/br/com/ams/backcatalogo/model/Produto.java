@@ -30,15 +30,19 @@ public class Produto extends AbstractTimesTampEntity implements Serializable {
 	@Column
 	private Integer codigo;
 
-	@Column
+	@Column(unique = true, length = 15)
 	private String referencia;
 
-	@Column
+	@Column(length = 100)
 	private String descricao;
 
-	public Produto(String descricao, String referencia) {
+	@Column
+	Double valor;
+
+	public Produto(String descricao, String referencia, Double valor) {
 		this.descricao = descricao;
 		this.referencia = referencia;
+		this.valor = valor;
 	}
 
 }

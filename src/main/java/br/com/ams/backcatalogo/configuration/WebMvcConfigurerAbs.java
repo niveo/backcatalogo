@@ -27,8 +27,8 @@ public class WebMvcConfigurerAbs implements WebMvcConfigurer {
 
 		log.info("addCorsMappings");
 
-		registry.addMapping("/**").allowedOrigins("*")
-				.allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS").allowCredentials(false);
+		registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE",
+				"OPTIONS");
 	}
 
 	@Override
