@@ -23,8 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.ams.backcatalogo.commons.Funcoes;
-import br.com.ams.backcatalogo.commons.Utils;
+import br.com.ams.backcatalogo.commons.ZipUtils;
+import br.com.ams.backcatalogo.commons.FileDirTemporario;
 import br.com.ams.backcatalogo.exception.CustomException;
 import br.com.ams.backcatalogo.model.Catalogo;
 import br.com.ams.backcatalogo.model.CatalogoPagina;
@@ -297,7 +297,7 @@ public class CatalogoArquivosService {
 
 		var registro = catalogoPaginasRepository.obterPaginasDoCatalogo(codigoCatalogo);
 
-		var files = Utils.diretorioTemporario();
+		var files = FileDirTemporario.diretorioTemporario();
 
 		for (var caPagina : registro) {
 			var destFile = new File(files.toString() + File.separator + caPagina.getCodigo() + "_"
@@ -315,7 +315,7 @@ public class CatalogoArquivosService {
 
 		var fileZip = File.createTempFile(UUID.randomUUID().toString(), ".zip");
 
-		Funcoes.zipDirectory(new ArrayList<>(), files, fileZip.toString());
+		ZipUtils.zipDirectory(new ArrayList<>(), files, fileZip.toString());
 
 		return fileZip;
 	}
@@ -347,7 +347,7 @@ public class CatalogoArquivosService {
 
 		var fileZip = File.createTempFile(UUID.randomUUID().toString(), ".zip");
 
-		Funcoes.zipDirectory(new ArrayList<>(), files, fileZip.toString());
+		ZipUtils.zipDirectory(new ArrayList<>(), files, fileZip.toString());
 
 		return fileZip;
 	}

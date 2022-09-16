@@ -15,7 +15,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.ams.backcatalogo.commons.Utils;
+import br.com.ams.backcatalogo.commons.FileDirTemporario;
 import br.com.ams.backcatalogo.model.Catalogo;
 import br.com.ams.backcatalogo.model.CatalogoPaginaProduto;
 import br.com.ams.backcatalogo.model.Produto;
@@ -112,7 +112,7 @@ public class IniciarBancoDadosConfiguration {
 
 				var in = this.getClass().getResourceAsStream("/CATALOGO.pdf");
 
-				var tempFile = Utils.criarArquivoTemporario(UUID.randomUUID().toString() + ".pdf");
+				var tempFile = FileDirTemporario.criarArquivoTemporario(UUID.randomUUID().toString() + ".pdf");
 
 				FileUtils.copyInputStreamToFile(in, tempFile);
 

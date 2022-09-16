@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class Funcoes {
+public class ZipUtils {
 
 	public static void zipDirectory(List<String> filesListInDir, File dir, String zipDirName) {
 		try {
@@ -34,9 +34,9 @@ public class Funcoes {
 		}
 	}
 
-	public static void populateFilesList(List<String> filesListInDir, File dir) throws IOException {
-		File[] files = dir.listFiles();
-		for (File file : files) {
+	private static void populateFilesList(List<String> filesListInDir, File dir) throws IOException {
+		var files = dir.listFiles();
+		for (var file : files) {
 			if (file.isFile())
 				filesListInDir.add(file.getAbsolutePath());
 			else
@@ -46,27 +46,20 @@ public class Funcoes {
 
 	public static void zipSingleFile(File file, String zipFileName) {
 		try {
-			// create ZipOutputStream to write to the zip file
-			FileOutputStream fos = new FileOutputStream(zipFileName);
-			ZipOutputStream zos = new ZipOutputStream(fos);
-			// add a new Zip Entry to the ZipOutputStream
-			ZipEntry ze = new ZipEntry(file.getName());
+			var fos = new FileOutputStream(zipFileName);
+			var zos = new ZipOutputStream(fos);
+			var ze = new ZipEntry(file.getName());
 			zos.putNextEntry(ze);
-			// read the file and write to ZipOutputStream
-			FileInputStream fis = new FileInputStream(file);
-			byte[] buffer = new byte[1024];
+			var fis = new FileInputStream(file);
+			var buffer = new byte[1024];
 			int len;
 			while ((len = fis.read(buffer)) > 0) {
 				zos.write(buffer, 0, len);
 			}
-
-			// Close the zip entry to write to zip file
 			zos.closeEntry();
-			// Close resources
 			zos.close();
 			fis.close();
 			fos.close();
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

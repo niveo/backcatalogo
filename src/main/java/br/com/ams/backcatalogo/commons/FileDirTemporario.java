@@ -3,17 +3,10 @@ package br.com.ams.backcatalogo.commons;
 import java.io.File;
 import java.util.UUID;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-public class Utils {
-
-	public static String carregarJSON(Object value) throws Exception {
-		return carregarJSON(value, false);
-	}
+public class FileDirTemporario {
 
 	public static File diretorioTemporarioEarquivo(String extencao) throws Exception {
-		var dir = System.getProperty("java.io.tmpdir") + File.separator + UUID.randomUUID().toString()
-				+ File.separator;
+		var dir = System.getProperty("java.io.tmpdir") + File.separator + UUID.randomUUID().toString() + File.separator;
 
 		System.out.println("Temporario: " + dir);
 
@@ -31,8 +24,7 @@ public class Utils {
 	}
 
 	public static File diretorioTemporario() throws Exception {
-		var dir = System.getProperty("java.io.tmpdir") + File.separator + UUID.randomUUID().toString()
-				+ File.separator;
+		var dir = System.getProperty("java.io.tmpdir") + File.separator + UUID.randomUUID().toString() + File.separator;
 
 		System.out.println("Temporario: " + dir);
 
@@ -41,12 +33,6 @@ public class Utils {
 		dirFile.mkdirs();
 
 		return dirFile;
-	}
-
-	public static String carregarJSON(Object value, Boolean ignorarAnotacoes) throws Exception {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.writerWithDefaultPrettyPrinter();
-		return mapper.writeValueAsString(value);
 	}
 
 	public static File criarArquivoDinamicoTemporario(String extencao) throws Exception {
