@@ -3,8 +3,6 @@ target/
 /target/
 resource/
 /resource/
-src/main/resources/static/*
-/src/main/resources/static/*
 logs/
 /logs/
 
