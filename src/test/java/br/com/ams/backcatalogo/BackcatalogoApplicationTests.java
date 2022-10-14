@@ -3,10 +3,10 @@ package br.com.ams.backcatalogo;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-//@SpringBootTest
+@SpringBootTest
 class BackcatalogoApplicationTests {
 
-	//@Test
+	@Test
 	void contextLoads() {
 	}
 

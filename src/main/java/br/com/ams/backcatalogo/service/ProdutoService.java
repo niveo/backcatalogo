@@ -27,7 +27,12 @@ public class ProdutoService implements ContractService<Produto> {
 
 	@Override
 	public Produto atualizar(Integer codigo, Produto entity) throws Exception {
-		return produtoRepository.save(entity);
+		var registro = this.produtoRepository.findById(codigo)
+				.orElseThrow(() -> new EntityNotFoundException("Produto", codigo));
+		registro.setValor(entity.getValor());
+		registro.setDescricao(entity.getDescricao());
+		registro.setReferencia(entity.getReferencia());
+		return produtoRepository.save(registro);
 	}
 
 	@Override

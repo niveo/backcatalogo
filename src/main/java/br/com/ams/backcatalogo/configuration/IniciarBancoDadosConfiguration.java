@@ -1,6 +1,7 @@
 package br.com.ams.backcatalogo.configuration;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -14,6 +15,9 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.ams.backcatalogo.commons.FileDirTemporario;
 import br.com.ams.backcatalogo.model.Catalogo;
@@ -50,57 +54,10 @@ public class IniciarBancoDadosConfiguration {
 
 			try {
 
-				var listaProdutos = new ArrayList<Produto>();
-				listaProdutos.add(new Produto("PRATINHO ANIMAL FUN LEAO", "49-8975", 2.50));
-				listaProdutos.add(new Produto("PRATINHO BOWL ANIMAL FUN LEAO", "49-8979", 2.50));
-				listaProdutos.add(new Produto("GARRAFINHA ANI FUN LEAO 400ML", "49-8983", 2.50));
-				listaProdutos.add(new Produto("PRATINHO ANIMAL FUN GIRAFA", "49-8974", 2.50));
-				listaProdutos.add(new Produto("PRATINHO BOWL ANIMAL FUN GIRAFA", "49-8978", 2.50));
-				listaProdutos.add(new Produto("GARRAFINHA ANI FUN GIRAFA 400ML", "49-8982", 2.50));
-				listaProdutos.add(new Produto("COPO DINO COM ALCA VERDE 240ML", "49-1826", 2.50));
-				listaProdutos.add(new Produto("COPO DINO COM ALCA ROSA 240ML", "49-1825", 2.50));
-				listaProdutos.add(new Produto("COPO C/ALCA REMO URSINHO RS250ML", "49-8237", 2.50));
-				listaProdutos.add(new Produto("COPO C/ALCA REM URSINHO AZ 250ML", "49-8238", 2.50));
-				listaProdutos.add(new Produto("GARRAFINHA FRESH ROSA 300ML", "49-5818", 2.50));
-				listaProdutos.add(new Produto("GARRAFINHA FRESH AZUL300ML", "49-5819", 2.50));
-				listaProdutos.add(new Produto("COPO D TREINAMENTO TIGRINHO180ML", "49-2634", 2.50));
-				listaProdutos.add(new Produto("COPO D TREINAMENTO GATINHO 180ML", "49-2647", 2.50));
-				listaProdutos.add(new Produto("COPO D TREINA C/ ALCA RS 160ML", "49-9727", 2.50));
-				listaProdutos.add(new Produto("COLHER FLEXIVEL SORTIDO", "49-5248", 2.50));
-				listaProdutos.add(new Produto("POTE LEITE PO C/ DIVIS ROSA300ML", "49-7761", 2.50));
-				listaProdutos.add(new Produto("POTE LEITE PO C/ DIVISOAZUL300ML", "49-7762", 2.50));
-				listaProdutos.add(new Produto("PORTA FRUTI SUGA EM SILI SORTIDO", "49-6156", 2.50));
-				listaProdutos.add(new Produto("ASPIRADOR NASAL DE SUCCAO", "49-9742", 2.50));
-				listaProdutos.add(new Produto("ASPIRA NASAL D SUCCCAO C/ ESTOJO", "49-1859", 2.50));
-				listaProdutos.add(new Produto("ASPIRADOR NASAL COM ESTOJO", "49-7751", 2.50));
-				listaProdutos.add(new Produto("CINTA TERMICA PARA COLICA AZUL", "49-9922", 2.50));
-				listaProdutos.add(new Produto("CINTA TERMICA PARA COLICA ROSA", "49-9921", 2.50));
-				listaProdutos.add(new Produto("ESCOVA E PENTE CERDAS NATURAIS", "49-8243", 2.50));
-				listaProdutos.add(new Produto("KIT CUIDADOS BRANCO", "49-3611", 2.50));
-				listaProdutos.add(new Produto("PRENDEDOR DE CHUPETA ANIMAL LEAO", "49-2047", 2.50));
-				listaProdutos.add(new Produto("PRENDEDOR D/CHUPETA ANIMAL GIRAF", "49-2049", 2.50));
-				listaProdutos.add(new Produto("MORDEDOR COM GEL SORTIDO", "49-7230", 2.50));
-				listaProdutos.add(new Produto("MORDEDOR COM AGUA MACAQUINHO", "49-1822", 2.50));
-				listaProdutos.add(new Produto("MORDEDOR COM AGUA CENTOPEIA", "49-9611", 2.50));
-				listaProdutos.add(new Produto("MASSAGEADOR DE GENGIVA BANANA", "49-7232", 2.50));
-				listaProdutos.add(new Produto("DEDOCHES DIVERTIDOS SAFARI", "49-7284", 2.50));
-				listaProdutos.add(new Produto("RISQUE E APAGUE COM ESPONJA", "49-7472", 2.50));
-				listaProdutos.add(new Produto("KIT LIXA DE UNHA ELETRICO", "49-3777", 2.50));
-				listaProdutos.add(new Produto("LENÇO BABY NASAL 20UN", "49-1990 ", 2.50));
-				listaProdutos.add(new Produto("GARRAFINHA D ALUM LEAO SOR 450ML", "49-2115", 2.50));
-				listaProdutos.add(new Produto("GARRAFINHA D ALU GIRAFA SOR450ML", "49-2118", 2.50));
-				listaProdutos.add(new Produto("POTE TERMICO GUMY AZUL 320ML", "49-2471", 2.50));
-				listaProdutos.add(new Produto("POTE TERMICO GUMY ROSA 320ML", "49-2469", 2.50));
-				listaProdutos.add(new Produto("COPO TERMIC C/CANU GUMY RS 470ML", "49-2110", 2.50));
-				listaProdutos.add(new Produto("COPO TERM C/CANUDO GUMY VD 470ML", "49-2111", 2.50));
-				listaProdutos.add(new Produto("COPO TERM C/CANUDO GUMY AZ 470ML", "49-2109", 2.50));
-				listaProdutos.add(new Produto("POTE TERMI ACO INOXIDAV RS 350ML", "49-0740", 2.50));
-				listaProdutos.add(new Produto("POTE TERMICO ACO INOXID AZ 350ML", "49-0741", 2.50));
-				listaProdutos.add(new Produto("COPO TERMICO C/CANUDO RS 480ML", "49-1384", 2.50));
-				listaProdutos.add(new Produto("COPO TERMICO C/CANUDO AZ 480ML", "49-1385", 2.50));
-				listaProdutos.add(new Produto("COPO D TREINA C/ ALCA AZUL 160ML", "49-9726", 2.50));
-				listaProdutos.add(new Produto("BABADOR COM BOLSO DINO", "49-3239", 2.50));
-				listaProdutos.add(new Produto("BABADOR COM BOLSO ARCO IRIS", "49-3241", 2.50));
+				var inProdutos = this.getClass().getResourceAsStream("/produtos.json");
+				String jsonProdutos = new String(inProdutos.readAllBytes(), StandardCharsets.UTF_8);
+				var listaProdutos = new ObjectMapper().readValue(jsonProdutos, new TypeReference<ArrayList<Produto>>() {
+				});
 				produtoRepository.saveAll(listaProdutos);
 
 				var catalogo = new Catalogo();

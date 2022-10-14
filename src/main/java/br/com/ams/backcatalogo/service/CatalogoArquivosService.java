@@ -23,8 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.ams.backcatalogo.commons.ZipUtils;
 import br.com.ams.backcatalogo.commons.FileDirTemporario;
+import br.com.ams.backcatalogo.commons.ZipUtils;
 import br.com.ams.backcatalogo.exception.CustomException;
 import br.com.ams.backcatalogo.model.Catalogo;
 import br.com.ams.backcatalogo.model.CatalogoPagina;

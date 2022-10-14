@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.apache.commons.io.FileUtils;
+
 import br.com.ams.backcatalogo.service.CatalogoArquivosService;
 import br.com.ams.backcatalogo.service.FileStorageService;
 
