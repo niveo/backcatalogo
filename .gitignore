@@ -6,6 +6,8 @@ resource/
 logs/
 /logs/
 
+java.io.tmpdir
+
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
